@@ -2,127 +2,58 @@ package first;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class Map<K,V> {
-    ArrayList<HashNode<K,V>> bucket = new ArrayList<>();
+public class Map {
+    ArrayList<ArrayList<String>> symbolTable = new ArrayList<>(30);
     int numBuckets = 30;
     int size;
     public Map(){
         for(int i=0; i<numBuckets; i++){
-            bucket.add(null);
+            symbolTable.add(new ArrayList<String>(10));
         }
     }
     public void print(){
-        bucket.stream()
-                .filter(Objects::nonNull)
-                .forEach( (k) -> System.out.println(k.key + ", " + k.value));
+        symbolTable.forEach(System.out::println);
     }
+
     public int getSize(){
         return size;
     }
+
     public boolean isEmpty(){
         return size == 0;
     }
-    private int getBucketIndex(K key){
+
+    private int getBucketIndex(String key){
         int hashCode = key.hashCode();
         return Math.abs(hashCode % numBuckets);
     }
-    public V get(K key){
-        int index = getBucketIndex(key);
-        HashNode<K,V> head = bucket.get(index);
-        while(head!=null) {
-            if(head.key.equals(key)){
-                return head.value;
-            }
-            head = head.next;
+
+    public int getOverallPosition(String token){
+        int index = getBucketIndex(token);
+        int lengthOfBuckets = 1;
+        for(int i = 0; i<index; i++){
+            lengthOfBuckets += symbolTable.get(i).size();
         }
-        return null;
+        int positionInBucket = findInBucket(token);
+        if(positionInBucket == -1) return -1;
+        return positionInBucket + lengthOfBuckets;
     }
 
-    public V remove(K key)
-    {
-        int index=getBucketIndex(key);
-        HashNode<K, V>head=bucket.get(index);
-        if(head==null)
-        {
-            return null;
+    public int findInBucket(String token){
+        //can be modified
+        int index = getBucketIndex(token);
+        var head = symbolTable.get(index);
+        for(int i = 0; i< head.size(); i++){
+            if(token.equals(head.get(i))) return i;
         }
-        if(head.key.equals(key))
-        {
-            V val=head.value;
-            head=head.next;
-            bucket.set(index, head);
-            size--;
-            return val;
-        }
-        else
-        {
-            HashNode<K, V>prev=null;
-            while(head!=null)
-            {
-
-                if(head.key.equals(key))
-                {
-                    prev.next=head.next;
-                    size--;
-                    return head.value;
-                }
-                prev=head;
-                head=head.next;
-            }
-            return null;
-        }
+        return -1;
     }
 
-    public void add(K key,V value)
+    public void add(String token)
     {
-        int index=getBucketIndex(key);
-        System.out.println(index);
-        HashNode<K, V>head=bucket.get(index);
-        HashNode<K, V>toAdd=new HashNode<>();
-        toAdd.key=key;
-        toAdd.value=value;
-        if(head==null)
-        {
-            bucket.set(index, toAdd);
-            size++;
-        }
-        else
-        {
-            while(head!=null)
-            {
-                if(head.key.equals(key))
-                {
-                    head.value=value;
-                    size++;
-                    break;
-                }
-                head=head.next;
-            }
-            if(head==null)
-            {
-                head=bucket.get(index);
-                toAdd.next=head;
-                bucket.set(index, toAdd);
-                size++;
-            }
-        }
-        if((1.0*size)/numBuckets>0.7)
-        {
-            ArrayList<HashNode<K, V>>tmp=bucket;
-            bucket=new ArrayList<>();
-            numBuckets=2*numBuckets;
-            for(int i=0;i<numBuckets;i++)
-            {
-                bucket.add(null);
-            }
-            for(HashNode<K, V> headNode:tmp)
-            {
-                while(headNode!=null)
-                {
-                    add(headNode.key, headNode.value);
-                    headNode=headNode.next;
-                }
-            }
+        int index = getBucketIndex(token);
+        if(findInBucket(token) == -1) {
+            symbolTable.get(index).add(token);
         }
     }
 }
