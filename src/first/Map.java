@@ -1,10 +1,9 @@
 package first;
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class Map {
     ArrayList<ArrayList<String>> symbolTable = new ArrayList<>(30);
-    int numBuckets = 30;
+    int numBuckets = 15;
     int size;
     public Map(){
         for(int i=0; i<numBuckets; i++){
@@ -32,7 +31,7 @@ public class Map {
         int index = getBucketIndex(token);
         int lengthOfBuckets = 1;
         for(int i = 0; i<index; i++){
-            lengthOfBuckets += symbolTable.get(i).size();
+            lengthOfBuckets += 10;
         }
         int positionInBucket = findInBucket(token);
         if(positionInBucket == -1) return -1;
