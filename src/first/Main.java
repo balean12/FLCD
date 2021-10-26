@@ -1,23 +1,28 @@
 package first;
 
-import java.util.Objects;
-
 public class Main {
 
     public static void main(String[] args) {
-        Map map=new Map();
-        map.add("this");
-        map.add("coder");
-        map.add("this");
-        map.add("add");
-        map.add("add1");
-        map.add("add2");
-        map.add("add3");
-        map.add("add4");
-        map.add("add5");
-        map.add("add6");
-        map.add("hi");
-        System.out.println(map.getOverallPosition("hi"));
-        map.print();
+        LanguageSpecification languageSpecification =new LanguageSpecification();
+        var codes = languageSpecification.getCodes();
+        ProgramInternalForm pif = new ProgramInternalForm();
+        SymbolTable symbolTable =new SymbolTable();
+        ScanningAnalyze scanningAnalyze =new ScanningAnalyze(languageSpecification, pif, symbolTable);
+        var tokens = scanningAnalyze.getInputAsTokenList("src/first/input1.txt");
+        //for(var token: tokens){
+        System.out.println(tokens);
+
+        try{
+            scanningAnalyze.scanningAlgorithm("src/first/input1.txt");
+            System.out.println("Lexically correct!\n");
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        System.out.println(pif.toString());
+        for(var c : languageSpecification.getCodes().entrySet()){
+            System.out.println(c.getKey() + " : " + c.getValue());
+        }
+        symbolTable.print();
     }
 }

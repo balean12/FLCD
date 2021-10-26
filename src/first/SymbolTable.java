@@ -1,11 +1,11 @@
 package first;
 import java.util.ArrayList;
 
-public class Map {
+public class SymbolTable {
     ArrayList<ArrayList<String>> symbolTable = new ArrayList<>(30);
     int numBuckets = 15;
     int size;
-    public Map(){
+    public SymbolTable(){
         for(int i=0; i<numBuckets; i++){
             symbolTable.add(new ArrayList<String>(10));
         }
