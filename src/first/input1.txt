@@ -1,0 +1,18 @@
+begin main{
+    int a = readk(int);
+    int b = readk(int);
+    int c = readk(int);
+    string s = "vai";
+    int max;
+    if[ a > b && a > c] then:
+        max=a;
+    else if[ b > c ] then:
+        max=b;
+    else:
+        max=c;
+    console_print(max);
+    a = b + c;
+    c++;
+    int t = +0;
+    end main;
+}
