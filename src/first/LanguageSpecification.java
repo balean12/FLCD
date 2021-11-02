@@ -99,7 +99,7 @@ public class LanguageSpecification {
        };
 
        public boolean isConstant(String token) {
-           return Pattern.compile("(^0|[+-]?[1-9]+[0-9]*$)|(^'[a-zA-Z0-9 #&^%]'$)|(^\"[a-zA-Z0-9 #&^%]{2,99}\"$)").matcher(token).matches();
+           return Pattern.compile("(^0|[+-]?[1-9]+[0-9]*$)|(^'[a-zA-Z0-9 #&^%]'$)|(^\"[a-zA-Z0-9 #&^%]{0,99}\"$)").matcher(token).matches();
        };
 
        public boolean isPartOfOperator(String token) {
