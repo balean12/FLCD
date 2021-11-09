@@ -9,10 +9,20 @@ import static java.lang.Integer.parseInt;
 public class FiniteAutomaton {
     private Set<String> setOfStates = new HashSet<>();
     private Set<String> alphabet = new HashSet<>();
-    private Map<String, ArrayList<String>> transitions = new HashMap<>();
+    private Map<String, HashSet<String>> transitions = new HashMap<>();
     private Set<String> setOfFinalStates = new HashSet<>();
+    private String initialState;
 
-    public FiniteAutomaton() {
+    public FiniteAutomaton() throws FileNotFoundException {
+        readFiniteAutomatonFromFile("./src/FA.input");
+    }
+
+    public String getInitialState() {
+        return initialState;
+    }
+
+    public void setInitialState(String initialState) {
+        this.initialState = initialState;
     }
 
     public Set<String> getSetOfStates() {
@@ -31,11 +41,11 @@ public class FiniteAutomaton {
         this.alphabet = alphabet;
     }
 
-    public Map<String, ArrayList<String>> getTransitions() {
+    public Map<String, HashSet<String>> getTransitions() {
         return transitions;
     }
 
-    public void setTransitions(Map<String, ArrayList<String>> transitions) {
+    public void setTransitions(Map<String, HashSet<String>> transitions) {
         this.transitions = transitions;
     }
 
@@ -54,19 +64,18 @@ public class FiniteAutomaton {
         Set<String> alphabet = new HashSet<String>(Arrays.asList(input.nextLine().split(" ")));
         this.setAlphabet(alphabet);
         int transitionsSize = parseInt(input.nextLine());
-        Map<String, ArrayList<String>> transitions = new HashMap<String, ArrayList<String>>();
-        while( transitionsSize > 0){
-            Set<String> transition = new HashSet<String>(Arrays.asList(input.nextLine().split(" ")));
-            Iterator<String> it = transition.iterator();
-            String key = it.next();
-            ArrayList<String> values = new ArrayList<String>();
-            while(it.hasNext()){
-                String value = it.next();
-                values.add(value);
+        Map<String, HashSet<String>> transitions = new HashMap<String, HashSet<String>>();
+        for(int i = 0; i< transitionsSize; i++) {
+            String[] transition = input.nextLine().split("");
+            if (transitions.containsKey(transition[0])) {
+                transitions.get(transition[0]).add(transition[1] + transition[2]);
+            } else {
+                transitions.put(transition[0], new HashSet<String>(Collections.singleton(transition[1] + transition[2])));
             }
-            transitions.put(key,values);
         }
-
+        setTransitions(transitions);
+        setInitialState(input.nextLine());
+        Set<String> finalStates = new HashSet<String>(Arrays.asList(input.nextLine().split(" ")));
+        setSetOfFinalStates(finalStates);
     }
-
 }
